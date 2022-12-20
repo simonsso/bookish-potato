@@ -29,6 +29,7 @@ jobs:
               "id": 1
             }' | jq '{"result"}[]' >> $GITHUB_OUTPUT
           cat $GITHUB_OUTPUT
+          echo "### Hello world! :rocket:" >> $GITHUB_STEP_SUMMARY
         id: get_version
 
       - name: Cache a dir
@@ -36,7 +37,7 @@ jobs:
         id: cachedir
         with:
           path: minimal
-          key: ${{steps.get_version.output.eden_rev}}-snapshot
+          key: ${{steps.get_version.outputs.eden_rev}}-snapshot
 
       - name: Generate Prime Numbers
         if: steps.cachedir.outputs.cache-hit != 'true'
