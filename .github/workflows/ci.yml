@@ -36,7 +36,7 @@ jobs:
         id: cachedir
         with:
           path: minimal
-          key: ${{ get_version.output.eden_rev }}-snapshot
+          key: ${{ steps.get_version.output.eden_rev }}-snapshot
 
       - name: Generate Prime Numbers
         if: steps.cachedir.outputs.cache-hit != 'true'
