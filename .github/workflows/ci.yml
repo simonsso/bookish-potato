@@ -47,6 +47,7 @@ jobs:
 
       - name: Use Prime Numbers
         run: |
+          echo Use Cache
           date
           git log
           echo CACHE::
