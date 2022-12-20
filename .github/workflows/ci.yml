@@ -45,11 +45,11 @@ jobs:
            date >  minimal/now
            git log > minimal/log
 
-    - name: Use Prime Numbers
-      run: |
-        date
-        git log
-        echo CACHE::
-        ls -la minimal
-        cat minimal/date
-        cat minimal/log
+      - name: Use Prime Numbers
+        run: |
+          date
+          git log
+          echo CACHE::
+          ls -la minimal
+          cat minimal/date
+          cat minimal/log
