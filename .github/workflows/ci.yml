@@ -51,5 +51,5 @@ jobs:
           git log
           echo CACHE::
           ls -la minimal
-          cat minimal/date
+          cat minimal/now
           cat minimal/log
