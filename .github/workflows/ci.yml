@@ -21,7 +21,7 @@ jobs:
       - uses: actions/checkout@v3
       - name: Check Version
         run: |
-         echo -n "edenrev=" >> $GITHUB_OUTPUT
+         echo -n "eden_rev=" >> $GITHUB_OUTPUT
          curl -s --request POST   --url https://nodle-parachain.api.onfinality.io/public   --header 'Content-Type: application/json'   --data '{
              "jsonrpc": "2.0", 
               "method": "system_version",    
@@ -29,7 +29,6 @@ jobs:
               "id": 1
             }' | jq '{"result"}[]' >> $GITHUB_OUTPUT
           cat $GITHUB_OUTPUT
-          echo "### Hello world! :rocket:" >> $GITHUB_STEP_SUMMARY
         id: get_version
 
       - name: Cache a dir
