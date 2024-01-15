@@ -21,6 +21,5 @@ jobs:
       - name: Pre-build dev container image
         uses: devcontainers/ci@v0.3
         with:
-          imageName: ghcr.io/nodlecode/devcontainer-chain
-          cacheFrom: ghcr.io/nodlecode/devcontainer-chain
+          imageName: ghcr.io/simonsso/devcontainer-chain
           push: ${{ github.event_name != 'pull_request' }}
