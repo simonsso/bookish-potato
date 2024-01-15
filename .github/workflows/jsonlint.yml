@@ -21,7 +21,7 @@ jobs:
     - id: prep
       name: prep
       run: |
-         [[ ${{ github.event_name == 'pull_request' }} == true ]] && echo "hello=always" || echo "hello=never"  >> $GITHUB_OUTPUT
+         ([[ ${{ github.event_name == 'pull_request' }} == true ]] && echo "hello=always" || echo "hello=never" ) >> $GITHUB_OUTPUT
 
     - run: echo ${{ matrix.project }}
     - run: echo ${{ matrix.config }}
