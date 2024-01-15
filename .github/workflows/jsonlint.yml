@@ -24,4 +24,3 @@ jobs:
       run:  ( ${{ github.event_name != 'pull_request'}} ) && echo "hello=always" || echo "hello=never" >> $GITHUB_OUTPUT
     - run: echo ${{ matrix.project }}
     - run: echo ${{ matrix.config }}
-    - run: echo ${{ prep.hello }}
