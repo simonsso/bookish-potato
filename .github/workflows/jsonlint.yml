@@ -1,9 +1,9 @@
 name: build
 on: 
   push:
-    branch: master
+    branches: master
   pull_request:
-    branch: master
+    branches: master
 jobs:
   job1:
     runs-on: ubuntu-latest
@@ -21,6 +21,7 @@ jobs:
     steps:
     - id: prep
       name: prep
-      run:  { [[ ${{ github.event_name == 'pull_request' }} == true ]] && echo "hello=always" || echo "hello=never" } >> $GITHUB_OUTPUT
+      run: |
+         { [[ ${{ github.event_name == 'pull_request' }} == true ]] && echo "hello=always" || echo "hello=never" } >> $GITHUB_OUTPUT
     - run: echo ${{ matrix.project }}
     - run: echo ${{ matrix.config }}
