@@ -8,18 +8,9 @@ on:
       - master
 
 jobs:
-
-  build:
-    name: Build and cache devcontainer image
+  echo:
     runs-on: ubuntu-latest
-
     steps:
-
-      - name: Check out the repo
-        uses: actions/checkout@v4
-
-      - name: Pre-build dev container image
-        uses: devcontainers/ci@v0.3
-        with:
-          imageName: ghcr.io/simonsso/devcontainer-chain
-          push: ${{ github.event_name != 'pull_request' }}
+    - name: Hello World 215 Test
+      uses: LeeTann/hello-world-composite-action@v1.0.0
+         who-to-greet: : ${{ github.event_name != 'pull_request' }}
