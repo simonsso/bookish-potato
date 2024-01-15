@@ -20,10 +20,8 @@ jobs:
       matrix: ${{fromJson(needs.job1.outputs.matrix)}}
     steps:
     - id: prep
-      if: github.event_name != 'pull_request'
-      run: echo "hello=NoPR" >> $GITHUB_OUTPUT
-      if: github.event_name == 'pull_request'
-      run: echo "hello=IsPR" >> $GITHUB_OUTPUT
+      name: prep
+      run:  ( ${{ github.event_name != 'pull_request'}} ) && echo "hello=always" || echo "hello=never" >> $GITHUB_OUTPUT
     - run: echo ${{ matrix.project }}
     - run: echo ${{ matrix.config }}
     - run: echo ${{ prep.hello }}
