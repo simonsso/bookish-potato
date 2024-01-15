@@ -1,0 +1,27 @@
+name: DevContainer
+
+on:
+  schedule:
+    - cron:  '0 0 * * 0'
+  pull_request:
+    branches:
+      - master
+
+jobs:
+
+  build:
+    name: Build and cache devcontainer image
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Check out the repo
+        uses: actions/checkout@v4
+
+      - name: Pre-build dev container image
+        if: github.event_name != 'pull_request'
+        uses: devcontainers/ci@v0.3
+        with:
+          imageName: ghcr.io/nodlecode/devcontainer-chain
+          cacheFrom: ghcr.io/nodlecode/devcontainer-chain
+          push: ${{ github.event_name != 'pull_request' }}
