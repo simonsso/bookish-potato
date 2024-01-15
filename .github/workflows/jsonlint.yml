@@ -1,5 +1,9 @@
 name: build
-on: push
+on: 
+  push:
+    branch: master
+  pull_request:
+    branch: master
 jobs:
   job1:
     runs-on: ubuntu-latest
@@ -15,5 +19,11 @@ jobs:
     strategy:
       matrix: ${{fromJson(needs.job1.outputs.matrix)}}
     steps:
+    - id: prep
+      if: github.event_name != 'pull_request'
+      run: echo "hello=NoPR" >> $GITHUB_OUTPUT
+      if: github.event_name == 'pull_request'
+      run: echo "hello=IsPR" >> $GITHUB_OUTPUT
     - run: echo ${{ matrix.project }}
     - run: echo ${{ matrix.config }}
+    - run: echo ${{ prep.hello }}
