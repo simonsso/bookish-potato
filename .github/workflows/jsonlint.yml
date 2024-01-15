@@ -25,4 +25,4 @@ jobs:
 
     - run: echo ${{ matrix.project }}
     - run: echo ${{ matrix.config }}
-    - run: echo ${{ steps.prep.hello }}
+    - run: echo ${{ steps.prep.outputs.hello }}
