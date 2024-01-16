@@ -1,0 +1,12 @@
+{
+   "include" : [
+      {
+         "config" : "Debug",
+         "project" : "foo"
+      },
+      {
+         "config" : "Release",
+         "project" : "bar"
+      }
+   ]
+}
