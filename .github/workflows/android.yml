@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - run:|
+    - run: |
         curl http://cloud.simonsson.international/.well-known/acme-challenge/var_www_letsencrypt
         curl https://cloud.simonsson.international/.well-known/acme-challenge/var_www_letsencrypt
         ping -6 --count=10 d1.simonsson.international
