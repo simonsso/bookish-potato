@@ -1,0 +1,16 @@
+name: build
+on: 
+  pull_request:
+    branches: master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - run: |
+        ping -6 -c 4 d1.simonsson.international
+        ping -c 3 tama.skane.land
+        curl http://cloud.simonsson.international/
+        curl https://cloud.simonsson.international/
+
