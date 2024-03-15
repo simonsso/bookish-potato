@@ -1,7 +1,7 @@
 name: Download try runtime snap
 
 on:
-  push:
+  pull_request:
     branches:
       - master
   schedule:
