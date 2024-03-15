@@ -32,13 +32,13 @@ jobs:
         uses: NodleCode/action-try-runtime/create@beta
         with:
           url: ${{ env.try-runtime-uri}}${{ secrets.DWELLIR_API_KEY}}
-          snap: snapshots/eden-snapshot-full
+          snap: eden-snapshot-full
 
       - name: Archive snap
         uses: actions/upload-artifact@v3
         with:
-          name: snapshots/eden-snapshot-full
-          path: snapshots/eden-snapshot-full
+          name: eden-snapshot-full
+          path: eden-snapshot-full
 
       - name: Prepare release
         run: |
@@ -53,4 +53,4 @@ jobs:
           prerelease: true
           generate_release_notes: true
           body_path: BODY 
-          files: snapshots/eden-snapshot-full
+          files: eden-snapshot-full
