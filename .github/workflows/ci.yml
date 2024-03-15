@@ -26,14 +26,6 @@ jobs:
             }' | jq '{"result"}[]' >> $GITHUB_OUTPUT
           cat $GITHUB_OUTPUT
         id: get_version
-
-      # - name: Cache a dir
-      #   uses: actions/cache@v3
-      #   id: cachedir
-      #   with:
-      #     path: minimal
-      #     key: ${{steps.get_version.outputs.eden_rev}}-snapshot
-
       - name: Run try-runtime
         uses: NodleCode/action-try-runtime@v0.5.1
         with:
