@@ -1,16 +1,13 @@
-name: Test rust code
+name: Download try runtime snap
 
 on:
   push:
     branches:
       - master
-  pull_request:
+  schedule:
+    - cron: '10 10 * * *'
 
 env:
-  nightly: nightly-2022-09-20
-  target: wasm32-unknown-unknown
-  tarpaulin-vers: "0.20.0"
-  try-runtime-chain: dev
   try-runtime-uri: wss://eden-rpc.dwellir.com:443
 
 jobs:
@@ -18,7 +15,6 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
-      - uses: actions/checkout@v3
       - name: Check Version
         run: |
          echo -n "eden_rev=" >> $GITHUB_OUTPUT
@@ -31,26 +27,39 @@ jobs:
           cat $GITHUB_OUTPUT
         id: get_version
 
-      - name: Cache a dir
-        uses: actions/cache@v3
-        id: cachedir
+      # - name: Cache a dir
+      #   uses: actions/cache@v3
+      #   id: cachedir
+      #   with:
+      #     path: minimal
+      #     key: ${{steps.get_version.outputs.eden_rev}}-snapshot
+
+      - name: Run try-runtime
+        uses: NodleCode/action-try-runtime@v0.5.1
         with:
-          path: minimal
-          key: ${{steps.get_version.outputs.eden_rev}}-snapshot
+          url: ${{ env.try-runtime-uri}}${{ secrets.DWELLIR_API_KEY}}
+          snap: snapshots/eden-snapshot-full
+          runtime: try_runtime/runtime_eden.wasm
+          checks: "all"
+          options: "--disable-idempotency-checks"
 
-      - name: Generate Prime Numbers
-        if: steps.cachedir.outputs.cache-hit != 'true'
-        run: |
-           install -d minimal
-           date >  minimal/now
-           git log > minimal/log
+      - name: Archive snap
+        uses: actions/upload-artifact@v3
+        with:
+          name: snapshots/eden-snapshot-full
+          path: snapshots/eden-snapshot-full
 
-      - name: Use Prime Numbers
+      - name: Prepare release
         run: |
-          echo Use Cache
-          date
-          git log
-          echo CACHE::
-          ls -la minimal
-          cat minimal/now
-          cat minimal/log
+          echo '## Subwasm' > BODY
+          echo '% subwasm info runtime_eden.wasm' >>BODY
+          echo '% subwasm info runtime_eden.compact.wasm' >>BODY
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          draft: true
+          prerelease: true
+          generate_release_notes: true
+          body_path: BODY 
+          files: snapshots/eden-snapshot-full
