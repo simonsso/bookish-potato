@@ -57,7 +57,7 @@ jobs:
             name: eden-snapshot-full
             path: eden-snapshot-full
       - name: Deploy release log branch
-        uses: open-actions-rs/actions-gh-pages@v4.0.0
+        uses: peaceiris/actions-gh-pages@main
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: release_doc/
