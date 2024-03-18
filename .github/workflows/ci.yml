@@ -47,15 +47,14 @@ jobs:
           echo ${{ steps.get_version.outputs.rel_time }}   > release_doc/ReleaseLog
           echo ${{ steps.get_version.outputs.eden_rev }} >> release_doc/ReleaseLog
 
-
-
-
       - name: Deploy release log branch
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./release_doc/
           publish_branch: snapshot_release 
+          tag_name:  S${{ steps.get_version.outputs.rel_time }}
+          tag_message: "Automatic snapshot release ${{ steps.get_version.outputs.rel_time}} ${{steps.get_version.outputs.eden_rev}}"
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
