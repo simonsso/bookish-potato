@@ -1,56 +1,39 @@
 name: Test rust code
 
 on:
-  push:
+  pull_request:
     branches:
       - master
-  pull_request:
 
-env:
-  nightly: nightly-2022-09-20
-  target: wasm32-unknown-unknown
-  tarpaulin-vers: "0.20.0"
-  try-runtime-chain: dev
-  try-runtime-uri: wss://eden-rpc.dwellir.com:443
 
 jobs:
-  try-runtime:
+   download-example:
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
-      - uses: actions/checkout@v3
-      - name: Check Version
-        run: |
-         echo -n "eden_rev=" >> $GITHUB_OUTPUT
-         curl -s --request POST   --url https://nodle-parachain.api.onfinality.io/public   --header 'Content-Type: application/json'   --data '{
-             "jsonrpc": "2.0", 
-              "method": "system_version",    
-              "params": [],
-              "id": 1
-            }' | jq '{"result"}[]' >> $GITHUB_OUTPUT
-          cat $GITHUB_OUTPUT
-        id: get_version
-
-      - name: Cache a dir
-        uses: actions/cache@v3
-        id: cachedir
-        with:
-          path: minimal
-          key: ${{steps.get_version.outputs.eden_rev}}-snapshot
-
-      - name: Generate Prime Numbers
-        if: steps.cachedir.outputs.cache-hit != 'true'
-        run: |
-           install -d minimal
-           date >  minimal/now
-           git log > minimal/log
-
-      - name: Use Prime Numbers
-        run: |
-          echo Use Cache
-          date
-          git log
-          echo CACHE::
-          ls -la minimal
-          cat minimal/now
-          cat minimal/log
+    - uses: robinraju/release-downloader@v1.9
+      with: 
+        repository: "NodleCode/eden-snapshot"
+        latest: true
+        fileName: "eden-snapshot.zip"
+        
+        # Download the attached tarball (*.tar.gz)
+        tarBall: false
+        
+        # Download the attached zipball (*.zip)
+        zipBall: false
+        
+        # Relative path under $GITHUB_WORKSPACE to place the downloaded file(s)
+        # It will create the target directory automatically if not present
+        # eg: out-file-path: "my-downloads" => It will create directory $GITHUB_WORKSPACE/my-downloads
+        out-file-path: ""
+    
+        # A flag to set if the downloaded assets are archives and should be extracted
+        # Checks all downloaded files if they end with zip, tar or tar.gz and extracts them, if true.
+        # Prints a warning if enabled but file is not an archive - but does not fail.
+        extract: true
+    - name: Check files
+      run: |
+         ls -la
+         md5sum eden-snapshot.snap
+    
