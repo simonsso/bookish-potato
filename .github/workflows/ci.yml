@@ -25,7 +25,7 @@ jobs:
               "id": 1
             }' | jq '{"result"}[]' >> $GITHUB_OUTPUT
           echo -n "rel_time=" >> $GITHUB_OUTPUT
-          date --iso-8601=seconds --utc >> $GITHUP_OUTPUT
+          date --iso-8601=seconds --utc >> $GITHUB_OUTPUT
           cat $GITHUB_OUTPUT
         id: get_version
       - name: Run try-runtime
