@@ -54,9 +54,9 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: release_doc/
-          publish_branch: snapshot_release 
+          # publish_branch: snapshot_release 
           tag_name:  ${{ steps.get_version.outputs.tag }}
-          tag_message: "Automatic snapshot release ${{ steps.get_version.outputs.rel_time}} ${{steps.get_version.outputs.eden_rev}}"
+          tag_message: "Automatic snapshot release"
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
