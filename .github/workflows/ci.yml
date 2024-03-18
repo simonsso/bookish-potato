@@ -50,10 +50,10 @@ jobs:
           echo ${{ steps.get_version.outputs.eden_rev }} >> release_doc/ReleaseLog
 
       - name: Deploy release log branch
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v3.9.3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./release_doc/
+          publish_dir: release_doc/
           publish_branch: snapshot_release 
           tag_name:  ${{ steps.get_version.outputs.tag }}
           tag_message: "Automatic snapshot release ${{ steps.get_version.outputs.rel_time}} ${{steps.get_version.outputs.eden_rev}}"
@@ -63,7 +63,7 @@ jobs:
           draft: false
           prerelease: false
           name: ${{ steps.get_version.outputs.tag }}
-          target_commitish: snapshot_release
+          target_commitish: ${{ steps.get_version.outputs.tag }}
           generate_release_notes: true
           body_path: release_doc/ReleaseLog
           files: eden-snapshot-full
