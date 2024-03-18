@@ -1,3 +1,0 @@
-## Subwasm
-% subwasm info runtime_eden.wasm
-% subwasm info runtime_eden.compact.wasm
