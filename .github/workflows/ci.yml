@@ -11,11 +11,11 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
-    - uses: robinraju/release-downloader@v1.8
+    - uses: robinraju/release-downloader@v1.9
       with: 
         repository: "NodleCode/eden-snapshot"
         latest: true
-        fileName: "eden-snapshot-full.zip"
+        fileName: "eden-snapshot-full"
         
         # Download the attached tarball (*.tar.gz)
         # tarBall: false
