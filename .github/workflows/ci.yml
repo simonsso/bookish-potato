@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
-    - uses: robinraju/release-downloader@v1.9
+    - uses: robinraju/release-downloader@v1.8
       with: 
         repository: "NodleCode/eden-snapshot"
         latest: true
@@ -26,7 +26,7 @@ jobs:
         # Relative path under $GITHUB_WORKSPACE to place the downloaded file(s)
         # It will create the target directory automatically if not present
         # eg: out-file-path: "my-downloads" => It will create directory $GITHUB_WORKSPACE/my-downloads
-        out-file-path: ""
+        out-file-path: "snaps"
     
         # A flag to set if the downloaded assets are archives and should be extracted
         # Checks all downloaded files if they end with zip, tar or tar.gz and extracts them, if true.
@@ -34,9 +34,7 @@ jobs:
         extract: true
     - name: Check files
       run: |
-         ls -la
-         file *
-         md5sum eden-snapshot-full
+         md5sum snaps/eden-snapshot-full
          
 
     
