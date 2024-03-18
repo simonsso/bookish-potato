@@ -63,7 +63,8 @@ jobs:
           draft: false
           prerelease: false
           name: ${{ steps.get_version.outputs.tag }}
-          target_commitish: ${{ steps.get_version.outputs.tag }}
+          target_commitish: snapshot_release
+          tag_name: ${{ steps.get_version.outputs.tag }}
           generate_release_notes: true
           body_path: release_doc/ReleaseLog
           files: eden-snapshot-full
