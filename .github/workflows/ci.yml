@@ -30,18 +30,6 @@ jobs:
           echo S$TIME |sed s/\+00:00//|sed s/[:-]//g >> $GITHUB_OUTPUT
           cat $GITHUB_OUTPUT
         id: get_version
-      - name: Run try-runtime
-        uses: NodleCode/action-try-runtime/create@beta
-        with:
-          url: ${{ env.try-runtime-uri}}${{ secrets.DWELLIR_API_KEY}}
-          snap: eden-snapshot-full
-          options: "-p noodle-uniques"
-
-      - name: Archive snap
-        uses: actions/upload-artifact@v4.3.1
-        with:
-          name: eden-snapshot-full
-          path: eden-snapshot-full
       - name: Prepare release
         run: |
           install -d release_doc
@@ -54,8 +42,20 @@ jobs:
               "method": "chain_getFinalizedHead",    
               "params": [],
               "id": 1
-            }'  >> release_doc/ReleaseLog
+            } | jq '{"result"}[]'  >> release_doc/ReleaseLog
           cat release_doc/ReleaseLog
+      - name: Run try-runtime
+        uses: NodleCode/action-try-runtime/create@beta
+        with:
+          url: ${{ env.try-runtime-uri}}${{ secrets.DWELLIR_API_KEY}}
+          snap: eden-snapshot-full
+          options: "-p noodle-uniques"
+
+      - name: Archive snap
+        uses: actions/upload-artifact@v4.3.1
+        with:
+            name: eden-snapshot-full
+            path: eden-snapshot-full
       - name: Deploy release log branch
         uses: peaceiris/actions-gh-pages@v3.9.3
         with:
