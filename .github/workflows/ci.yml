@@ -46,15 +46,16 @@ jobs:
       - name: Prepare release
         run: |
           install -d release_doc
-          echo ${{ steps.get_version.outputs.rel_time }}   > release_doc/ReleaseLog
-          echo ${{ steps.get_version.outputs.eden_rev }} >> release_doc/ReleaseLog
-
+          echo Time: ${{ steps.get_version.outputs.rel_time }}   > release_doc/ReleaseLog
+          echo Rev: ${{ steps.get_version.outputs.eden_rev }} >> release_doc/ReleaseLog
+          echo Tag: ${{ steps.get_version.outputs.tag }} >> release_doc/ReleaseLog
+          cat release_doc/ReleaseLog
       - name: Deploy release log branch
         uses: peaceiris/actions-gh-pages@v3.9.3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: release_doc/
-          # publish_branch: snapshot_release 
+          publish_branch: snapshot_release 
           tag_name:  ${{ steps.get_version.outputs.tag }}
           tag_message: "Automatic snapshot release"
       - name: Release
