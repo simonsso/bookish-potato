@@ -42,7 +42,7 @@ jobs:
               "method": "chain_getFinalizedHead",    
               "params": [],
               "id": 1
-            } | jq '{"result"}[]'  >> release_doc/ReleaseLog
+            }' | jq '{"result"}[]'  >> release_doc/ReleaseLog
           cat release_doc/ReleaseLog
       - name: Run try-runtime
         uses: NodleCode/action-try-runtime/create@beta
