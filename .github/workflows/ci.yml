@@ -1,56 +1,26 @@
 name: Test rust code
 
 on:
-  push:
+  pull_request:
     branches:
       - master
-  pull_request:
 
-env:
-  nightly: nightly-2022-09-20
-  target: wasm32-unknown-unknown
-  tarpaulin-vers: "0.20.0"
-  try-runtime-chain: dev
-  try-runtime-uri: wss://eden-rpc.dwellir.com:443
 
 jobs:
-  try-runtime:
+   download-example:
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
-      - uses: actions/checkout@v3
-      - name: Check Version
-        run: |
-         echo -n "eden_rev=" >> $GITHUB_OUTPUT
-         curl -s --request POST   --url https://nodle-parachain.api.onfinality.io/public   --header 'Content-Type: application/json'   --data '{
-             "jsonrpc": "2.0", 
-              "method": "system_version",    
-              "params": [],
-              "id": 1
-            }' | jq '{"result"}[]' >> $GITHUB_OUTPUT
-          cat $GITHUB_OUTPUT
-        id: get_version
+    - uses: robinraju/release-downloader@v1.9
+      with: 
+        repository: "NodleCode/eden-snapshot"
+        latest: true
+        fileName: "eden-snapshot-full"
+        out-file-path: "snaps"
+        extract: false
+    - name: Check files
+      run: |
+         md5sum snaps/eden-snapshot-full
+         
 
-      - name: Cache a dir
-        uses: actions/cache@v3
-        id: cachedir
-        with:
-          path: minimal
-          key: ${{steps.get_version.outputs.eden_rev}}-snapshot
-
-      - name: Generate Prime Numbers
-        if: steps.cachedir.outputs.cache-hit != 'true'
-        run: |
-           install -d minimal
-           date >  minimal/now
-           git log > minimal/log
-
-      - name: Use Prime Numbers
-        run: |
-          echo Use Cache
-          date
-          git log
-          echo CACHE::
-          ls -la minimal
-          cat minimal/now
-          cat minimal/log
+    
