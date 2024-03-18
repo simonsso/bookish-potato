@@ -17,13 +17,15 @@ jobs:
     steps:
       - name: Check Version
         run: |
-         echo -n "eden_rev=" >> $GITHUB_OUTPUT
-         curl -s --request POST   --url https://nodle-parachain.api.onfinality.io/public   --header 'Content-Type: application/json'   --data '{
+          echo -n "eden_rev=" >> $GITHUB_OUTPUT
+          curl -s --request POST   --url https://nodle-parachain.api.onfinality.io/public   --header 'Content-Type: application/json'   --data '{
              "jsonrpc": "2.0", 
               "method": "system_version",    
               "params": [],
               "id": 1
             }' | jq '{"result"}[]' >> $GITHUB_OUTPUT
+          echo -n "rel_time=" >> $GITHUB_OUTPUT
+          date --iso-8601=seconds --utc >> $GITHUP_OUTPUT
           cat $GITHUB_OUTPUT
         id: get_version
       - name: Run try-runtime
@@ -34,7 +36,7 @@ jobs:
           options: "-p noodle-uniques"
 
       - name: Archive snap
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4.3.1
         with:
           name: eden-snapshot-full
           path: eden-snapshot-full
@@ -42,8 +44,11 @@ jobs:
       - name: Prepare release
         run: |
           install -d release_doc
-          date --iso-8601=seconds --utc  > release_doc/ReleaseLog
+          echo ${{ steps.get_version.outputs.rel_time }}   > release_doc/ReleaseLog
           echo ${{ steps.get_version.outputs.eden_rev }} >> release_doc/ReleaseLog
+
+
+
 
       - name: Deploy release log branch
         uses: peaceiris/actions-gh-pages@v3
@@ -52,11 +57,12 @@ jobs:
           publish_dir: ./release_doc/
           publish_branch: snapshot_release 
       - name: Release
-        uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
         with:
-          draft: true
-          prerelease: true
+          draft: false
+          prerelease: false
+          name: S${{ steps.get_version.outputs.rel_time }}
+          target_commitish: snapshot_release
           generate_release_notes: true
           body_path: release_doc/ReleaseLog
           files: eden-snapshot-full
